@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Taro from '@tarojs/taro'
+import dayjs from 'dayjs'
 import { observer } from 'mobx-react-lite'
 import { AtForm, AtInput, AtList, AtListItem, AtAvatar, AtButton } from 'taro-ui'
 import { View, Picker, Text, Button } from '@tarojs/components';
-import request from '../../utils/request'
 import { WeightUnitMap, WeightRange, WeightNumRange, WeightUnitRange } from './index.d';
+import request from '../../utils/request'
 import store from '../../store/app'
 
 import './index.scss'
@@ -17,7 +18,10 @@ function Index() {
     name: '',
     stature: '',
     sex: '男',
-    cweight: [10, 0, 0]
+    cweight: [10, 0, 0],
+    eweight: [5, 0, 0],
+    ctime: dayjs().format('YYYY-MM-DD'),
+    etime: dayjs().subtract(1, 'months').format('YYYY-MM-DD'),
   },
   )
   const [weidhtRange, setWeightRange] = useState(WeightRange[0])
@@ -119,6 +123,55 @@ function Index() {
             title='初始体重'
             extraText={`${WeightRange[data.cweight[2]][data.cweight[0]]}.${data.cweight[1]}${WeightUnitMap[data.cweight[2]]}`}
           />
+        </AtList>
+      </Picker>
+
+      <Picker
+        mode='multiSelector'
+        range={[weidhtRange, WeightNumRange, WeightUnitRange]}
+        value={data.eweight}
+        onColumnChange={(event) => {
+          if (event.detail.column === 2) {
+            setData({
+              ...data,
+              eweight: [data.eweight[0], data.eweight[1], event.detail.value]
+            })
+            setWeightRange(WeightRange[event.detail.value])
+          }
+
+        }}
+        onChange={(value) => {
+          setDataHandle('eweight', value.detail.value)
+          console.log(WeightRange, value.detail.value[2])
+
+        }}
+      >
+        <AtList>
+          <AtListItem
+            title='目标体重'
+            extraText={`${WeightRange[data.eweight[2]][data.eweight[0]]}.${data.eweight[1]}${WeightUnitMap[data.eweight[2]]}`}
+          />
+        </AtList>
+      </Picker>
+
+      <Picker
+        mode='date'
+        onChange={(target) => {
+          setDataHandle('ctime', target.detail.value)
+        }}
+      >
+        <AtList>
+          <AtListItem title='开始日期' extraText={data.ctime} />
+        </AtList>
+      </Picker>
+      <Picker
+        mode='date'
+        onChange={(target) => {
+          setDataHandle('etime', target.detail.value)
+        }}
+      >
+        <AtList>
+          <AtListItem title='目标日期' extraText={data.etime} />
         </AtList>
       </Picker>
     </View>
