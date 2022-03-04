@@ -1,0 +1,33 @@
+.signin{
+  padding: 0px 14px;
+  &-card{
+    width: 96%;
+    height: 160px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgb(192, 192, 192);
+    margin: 10px auto;
+    display: flex;
+    align-items: center;
+    &-avatar{
+      margin:0px 20px;
+    }
+    &-info{
+      &-nickname{
+        font-size: 30px;
+      }
+    }
+  }
+  &-form{
+    &-sex{
+      font-weight: 500;
+      font-size: 38px;
+      display: flex;
+      height: 100px;
+     text-align: center;
+     line-height: 100px;
+      &> View{
+        width: 50%;
+      }
+    }
+  }
+}

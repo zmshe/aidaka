@@ -1,20 +1,17 @@
-import { Component } from 'react'
+// import { } from 'react';
+import Taro, {useDidShow} from '@tarojs/taro'
+import store from './store/app'
 import './app.scss'
 
-class App extends Component {
-
-  componentDidMount () {}
-
-  componentDidShow () {}
-
-  componentDidHide () {}
-
-  componentDidCatchError () {}
-
-  // this.props.children 是将要会渲染的页面
-  render () {
-    return this.props.children
-  }
+function App(props) {
+  useDidShow(() => {
+    Taro.setStorage({key: 'openid', data: 'test'})
+    Taro.getStorageSync('openid')
+    Taro.getUserInfo().then((res) => {
+      store.userinfo = res.userInfo
+    })
+  })
+  return props.children
 }
-
+ 
 export default App
